@@ -1,0 +1,44 @@
+name: Windows Desktop Build
+
+on:
+  workflow_dispatch:      # اجرای دستی از تب Actions
+  push:
+    branches: [ main ]    # با هر push به main هم اجرا می‌شود (اختیاری)
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+
+      - name: Enable Windows desktop support
+        run: flutter config --enable-windows-desktop
+
+      - name: Add Windows platform files if missing
+        run: |
+          if (-not (Test-Path "windows")) { flutter create --platforms=windows . }
+
+      - name: Get Flutter packages
+        run: flutter pub get
+
+      - name: Generate Windows application icon
+        run: dart run flutter_launcher_icons
+
+      - name: Build Windows Release
+        run: flutter build windows --release
+
+      - name: Zip Windows build output
+        run: Compress-Archive -Path "build\windows\x64\runner\Release\*" -DestinationPath "windows_build.zip" -Force
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows_build
+          path: windows_build.zip
