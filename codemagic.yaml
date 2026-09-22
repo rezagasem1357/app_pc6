@@ -1,0 +1,28 @@
+workflows:
+  windows-workflow:
+    name: Windows Desktop Build
+    instance_type: windows_x2
+    max_build_duration: 60
+    environment:
+      flutter: stable
+    scripts:
+      - name: Get Flutter packages
+        script: |
+          flutter pub get
+      - name: Enable Windows desktop support
+        script: |
+          flutter config --enable-windows-desktop
+      - name: Add Windows platform files if missing
+        script: |
+          if (-not (Test-Path "windows")) { flutter create --platforms=windows . }
+      - name: Generate app icon (store logo) for Windows
+        script: |
+          dart run flutter_launcher_icons
+      - name: Build Windows Release
+        script: |
+          flutter build windows --release
+      - name: Zip Windows build output
+        script: |
+          Compress-Archive -Path "build\windows\x64\runner\Release\*" -DestinationPath "windows_build.zip" -Force
+    artifacts:
+      - windows_build.zip

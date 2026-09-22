@@ -1,0 +1,40 @@
+name: store_accounting_desktop
+description: "نرم‌افزار حسابداری فروشگاهی (نسخه ویندوز) با امکانات حداقلی، هم‌راستا با اپ موبایل صندوق/مدیریت"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  shared_preferences: ^2.2.2
+  path_provider: ^2.1.5
+  cupertino_icons: ^1.0.6
+  http: ^1.2.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.1
+
+flutter_launcher_icons:
+  image_path: "assets/images/logo.png"
+  windows:
+    generate: true
+    icon_size: 256
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+
+  fonts:
+    - family: Vazir
+      fonts:
+        - asset: assets/fonts/Vazir.ttf
+        - asset: assets/fonts/Vazir-Bold.ttf
+          weight: 700
